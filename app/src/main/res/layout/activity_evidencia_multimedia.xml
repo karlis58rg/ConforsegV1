@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.EvidenciaMultimedia">
+
+    <ImageView
+        android:id="@+id/imgBackGroundEMultimedia"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_principal_logo"/>
+    <ImageView
+        android:id="@+id/imgHeaderBackGroundEMultimedia"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/backgroundBotones" />
+
+    <ImageView
+        android:id="@+id/imgHomeWhiteEMultimedia"
+        android:layout_width="40dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_menu_home"/>
+
+    <ImageView
+        android:id="@+id/imgLogOutWhiteEMultimedia"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_ir_servicios"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/imgHeaderWhiteEMultimedia"
+        android:layout_width="200dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="11dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/ic_header_white" />
+
+    <TextView
+        android:id="@+id/lblServiciosEMultimedia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FRACCIONAMIENTO SAN JAVIER PRIMERA SECCIÓN"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/imgHeaderBackGroundEMultimedia"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="30dp"
+        android:layout_below="@id/lblServiciosEMultimedia">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/marcospinner">
+
+            <LinearLayout
+                android:id="@+id/lyDatosEMultimedia"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:background="@drawable/drawable_pressed">
+
+                <ImageView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/ic_e_fotografica" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:text="Evidencia Fotográfica"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyDatosEMultimedia1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lyDatosEMultimedia"
+                android:layout_marginTop="25dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal">
+                        <ImageView
+                            android:id="@+id/imgEvidencia1"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp" />
+                        <ImageView
+                            android:id="@+id/imgCam1"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:background="@drawable/ic_e_fotografica" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    android:gravity="center_vertical">
+                    <Button
+                        android:id="@+id/btnEvidencia1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/boton_redondo"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:text="Enviar Imagen"
+                        android:textColor="@color/white" />
+                    <TextView
+                        android:id="@+id/lblEvidenciaEnviada1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Imagen enviada exitosamente"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyDatosEMultimedia2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lyDatosEMultimedia1"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal">
+                        <ImageView
+                            android:id="@+id/imgEvidencia2"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp" />
+                        <ImageView
+                            android:id="@+id/imgCam2"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:background="@drawable/ic_e_fotografica" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    android:gravity="center_vertical">
+                    <Button
+                        android:id="@+id/btnEvidencia2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/boton_redondo"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:text="Enviar Imagen"
+                        android:textColor="@color/white" />
+                    <TextView
+                        android:id="@+id/lblEvidenciaEnviada2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Imagen enviada exitosamente"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyDatosEMultimedia3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lyDatosEMultimedia2"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal">
+                        <ImageView
+                            android:id="@+id/imgEvidencia3"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp" />
+                        <ImageView
+                            android:id="@+id/imgCam3"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:background="@drawable/ic_e_fotografica" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    android:gravity="center_vertical">
+                    <Button
+                        android:id="@+id/btnEvidencia3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/boton_redondo"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:text="Enviar Imagen"
+                        android:textColor="@color/white" />
+                    <TextView
+                        android:id="@+id/lblEvidenciaEnviada3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Imagen enviada exitosamente"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+
+</RelativeLayout>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.Incidencias">
+
+    <ImageView
+        android:id="@+id/imgBackGroundIncidencias"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_principal_logo"/>
+
+    <ImageView
+        android:id="@+id/imgHeaderBackGroundIncidencias"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/backgroundBotones"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgHomeWhiteIncidencias"
+        android:layout_width="40dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/ic_menu_home"
+        app:layout_constraintBottom_toBottomOf="@+id/imgHeaderBackGroundIncidencias"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgLogOutWhiteIncidencias"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_ir_servicios"
+        android:layout_marginRight="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgHeaderBackGroundIncidencias"
+        app:layout_constraintEnd_toEndOf="@+id/imgHeaderBackGroundIncidencias"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/imgHeaderWhiteIncidencias"
+        android:layout_width="200dp"
+        android:layout_height="35dp"
+        android:background="@drawable/ic_header_white"
+        app:layout_constraintBottom_toBottomOf="@+id/imgHeaderBackGroundIncidencias"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblServiciosIncidencias"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="FRACCIONAMIENTO SAN JAVIER PRIMERA SECCIÓN"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgHeaderBackGroundIncidencias" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="700dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblServiciosIncidencias">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/lyDatosIncidencias"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:background="@drawable/drawable_pressed">
+
+                <ImageView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/ic_incidencias" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="10dp"
+                    android:text="Incidencias"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyDatosIncidencias1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lyDatosIncidencias"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/txtObservacionesIncidencias"
+                        android:layout_width="350dp"
+                        android:layout_height="300dp"
+                        android:gravity="start|top"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:background="@drawable/marcospinner"
+                        android:inputType="textMultiLine|textCapCharacters"
+                        android:hint="Observaciones"
+                        android:layout_marginTop="15dp"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="5dp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/imgMicrofonoIncidencias"
+                        android:layout_width="45dp"
+                        android:layout_height="80dp"
+                        android:layout_alignEnd="@+id/txtObservacionesIncidencias"
+                        android:layout_alignParentBottom="true"
+                        android:paddingBottom="25dp"
+                        android:src="@drawable/ic_microfono"
+                        app:tint="@color/white" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lyDatosIncidencias1"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.10"
+                    android:orientation="vertical"
+                    android:weightSum="1"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+                    <Button
+                        android:id="@+id/btnIncidencias"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/boton_redondo"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:text="Enviar Datos"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.10"
+                    android:orientation="vertical"
+                    android:weightSum="1"></LinearLayout>
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

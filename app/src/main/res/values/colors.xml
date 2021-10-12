@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#B56101</color>
+    <color name="purple_500">#B56101</color>
+    <color name="purple_700">#B56101</color>
+    <color name="teal_200">#B56101</color>
+    <color name="teal_700">#B56101</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+
+    <color name="backgroundtxt">#003147</color>
+    <color name="backgroundBotones">#B56101</color>
+    <color name="backgroundSplash">#2680BF</color>
+    <color name="colorAccent">#FFB700</color>
+    <color name="color_bold_list">#000</color>
+</resources>
