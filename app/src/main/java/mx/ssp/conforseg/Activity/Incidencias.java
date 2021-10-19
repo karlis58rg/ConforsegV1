@@ -169,7 +169,7 @@ public class Incidencias extends AppCompatActivity {
                 .add("Usuario", modeloIncidencias.getUsuario())
                 .build();
         Request request = new Request.Builder()
-                .url("http://c5i-ses.hidalgo.gob.mx/WsConforseg/api/Incidencias/")
+                .url("https://c5.hidalgo.gob.mx/WsConforseg/api/Incidencias/")
                 .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {

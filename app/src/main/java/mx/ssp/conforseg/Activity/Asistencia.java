@@ -3,11 +3,20 @@ package mx.ssp.conforseg.Activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +24,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,10 +57,10 @@ public class Asistencia extends AppCompatActivity {
     Button btnAsistencias;
     TextView lblServiciosAsistencia;
     ListView listAsistenciasPrincipal;
-    ArrayList<String> ListaIdAsistencia,ListaAsistencia;
+    ArrayList<String> ListaIdAsistencia,ListaAsistencia,ListaRadioBoolean;
     String[] ArrayListaAsistencia;
     SharedPreferences share;
-    String cargarServicio, cargarUsuario,idAsistenciaUser,fecha,varAsistencia,
+    String cargarServicio, cargarUsuario,fecha,
             latitud = "null", longitud = "null";
     Funciones funciones;
     /*************************************************************/
@@ -62,6 +73,7 @@ public class Asistencia extends AppCompatActivity {
         setContentView(R.layout.activity_asistencia);
         cargarDatos();
         cargarAsistencia();
+        locationStart();
         lblServiciosAsistencia = findViewById(R.id.lblServiciosAsistencia);
         btnAsistencias = findViewById(R.id.btnAsistencias);
         listAsistenciasPrincipal = findViewById(R.id.listAsistenciasPrincipal);
@@ -72,8 +84,14 @@ public class Asistencia extends AppCompatActivity {
         btnAsistencias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listAsistenciasPrincipal.getAdapter().getCount();
-                System.out.println("REGISTROS TOTALES " + listAsistenciasPrincipal.getAdapter().getCount());
+                Toast.makeText(getApplicationContext(), "ESTAMOS PROCESANDO SU SOLICITUD, UN MOMENTO POR FAVOR", Toast.LENGTH_SHORT).show();
+                for(int i = 0; i< listAsistenciasPrincipal.getCount();i++)
+                {
+                    Log.i("LIBRETA",ListaIdAsistencia.get(i));
+                    Log.i("LIBRETA",ListaAsistencia.get(i));
+                    Log.i("LIBRETA",ListaRadioBoolean.get(i));
+                    insertAsistencias(ListaIdAsistencia.get(i),ListaRadioBoolean.get(i));
+                }
             }
         });
     }
@@ -87,7 +105,7 @@ public class Asistencia extends AppCompatActivity {
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://c5i-ses.hidalgo.gob.mx/WsConforseg/api/Vigilantes?tipoServicio=" + idServicio)
+                .url("https://c5.hidalgo.gob.mx/WsConforseg/api/Vigilantes?tipoServicio=" + idServicio)
                 .build();
 
         System.out.println("BUSCANDO DATOS RESPUESTA");
@@ -111,6 +129,7 @@ public class Asistencia extends AppCompatActivity {
                                 String resp = myResponse;
                                 ListaIdAsistencia = new ArrayList<String>();
                                 ListaAsistencia = new ArrayList<String>();
+                                ListaRadioBoolean = new ArrayList<String>();
                                 Log.i("ASISTENCIA", "RESP:" + resp);
 
                                 //***************** RESPUESTA DEL WEBSERVICE **************************//
@@ -142,6 +161,7 @@ public class Asistencia extends AppCompatActivity {
                                                             ((jsonjObject.getString("Nombre")).equals("null") ? " - " : jsonjObject.getString("Nombre")) +
                                                                     " "+((jsonjObject.getString("APaterno")).equals("null")?"":jsonjObject.getString("APaterno"))
                                             );
+                                            ListaRadioBoolean.add("NO");
 
                                         } catch (JSONException e) {
                                             Log.i("ASISTENCIAS", "catch:" + e.toString());
@@ -154,7 +174,7 @@ public class Asistencia extends AppCompatActivity {
                                 }
 
                                 //AGREGA LOS DATOS AL LISTVIEW MEDIANTE EL ADAPTADOR
-                                Asistencia.MyAdapter adapter = new Asistencia.MyAdapter(getApplicationContext(),ListaIdAsistencia, ListaAsistencia, "Nombre");
+                                Asistencia.MyAdapter adapter = new Asistencia.MyAdapter(getApplicationContext(),ListaIdAsistencia, ListaAsistencia, "Nombre",ListaRadioBoolean);
                                 listAsistenciasPrincipal.setAdapter(adapter);
                                 funciones.ajustaAlturaListView(listAsistenciasPrincipal,250);
                                 //*************************
@@ -169,7 +189,7 @@ public class Asistencia extends AppCompatActivity {
         });
     }
 
-    private void insertAsistencias() {
+    private void insertAsistencias(String idUser,String asistencia) {
         System.out.println("INSERT");
         DataHelper dataHelper = new DataHelper(getApplication());
         int idDescServicio = dataHelper.getIdTempoServiciosSup(cargarServicio);
@@ -183,8 +203,8 @@ public class Asistencia extends AppCompatActivity {
         fecha = dateFormat.format(date);
 
         ModeloAsistencia modeloAsistencia = new ModeloAsistencia
-                (idServicio, idAsistenciaUser, fecha,
-                        varAsistencia, longitud, latitud, cargarUsuario);
+                (idServicio, idUser, fecha,
+                        asistencia, longitud, latitud, cargarUsuario);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody body = new FormBody.Builder()
@@ -197,7 +217,7 @@ public class Asistencia extends AppCompatActivity {
                 .add("Usuario", modeloAsistencia.getUsuario())
                 .build();
         Request request = new Request.Builder()
-                .url("http://c5i-ses.hidalgo.gob.mx/WsConforseg/api/Asistencias/")
+                .url("https://c5.hidalgo.gob.mx/WsConforseg/api/Asistencias/")
                 .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {
@@ -220,7 +240,7 @@ public class Asistencia extends AppCompatActivity {
                                 System.out.println("EL DATO SE ENVIO CORRECTAMENTE");
                                 Toast.makeText(getApplicationContext(), "EL DATO SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(getApplicationContext(), "LO SENTIMOS, SU INFORMACIÓN NO PUDO SER ENVIADA CORRECTAMENTE, FAVOR DE INTENTARLO NUEVAMENTE ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "LO SENTIMOS, USTED YA COMPLETÓ EL FORMULARIO DE ASISTENCIAS DEL DÍA", Toast.LENGTH_SHORT).show();
                             }
                             Log.i("HERE", resp);
                         }
@@ -229,6 +249,89 @@ public class Asistencia extends AppCompatActivity {
             }
         });
     }
+
+    /*********************Apartir de aqui empezamos a obtener la direciones y coordenadas************************/
+    public void locationStart() {
+        LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Asistencia.Localizacion Local = new Asistencia.Localizacion();
+        Local.setAsistencia(this);
+        final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!gpsEnabled) {
+            Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(settingsIntent);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+            return;
+        }
+        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
+        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) Local);
+        mensaje1 = "Localizacion agregada";
+        mensaje2 = "";
+        Log.i("HERE", mensaje1);
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1000) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                locationStart();
+                return;
+            }
+        }
+    }
+
+    /**************************Aqui empieza la Clase Localizacion********************************/
+    public class Localizacion implements LocationListener {
+        Asistencia asistencia;
+
+        public Asistencia getAsistencia() {
+            return asistencia;
+        }
+
+        public void setAsistencia(Asistencia asistencia1) {
+            this.asistencia = asistencia1;
+        }
+
+        @Override
+        public void onLocationChanged(Location loc) {
+            // Este metodo se ejecuta cada vez que el GPS recibe nuevas coordenadas
+            // debido a la deteccion de un cambio de ubicacion
+            loc.getLatitude();
+            loc.getLongitude();
+            lat = loc.getLatitude();
+            lon = loc.getLongitude();
+            System.out.println("Lat = " + loc.getLatitude() + "\n Long = " + loc.getLongitude());
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            // Este metodo se ejecuta cuando el GPS es desactivado
+            mensaje1 = "GPS Desactivado";
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            // Este metodo se ejecuta cuando el GPS es activado
+            mensaje1 = "GPS Activado";
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            switch (status) {
+                case LocationProvider.AVAILABLE:
+                    Log.d("debug", "LocationProvider.AVAILABLE");
+                    break;
+                case LocationProvider.OUT_OF_SERVICE:
+                    Log.d("debug", "LocationProvider.OUT_OF_SERVICE");
+                    break;
+                case LocationProvider.TEMPORARILY_UNAVAILABLE:
+                    Log.d("debug", "LocationProvider.TEMPORARILY_UNAVAILABLE");
+                    break;
+            }
+        }
+    }
+
     public void cargarDatos() {
         share = getSharedPreferences("main", Context.MODE_PRIVATE);
         cargarServicio = share.getString("Servicio", "SIN INFORMACION");
@@ -237,14 +340,15 @@ public class Asistencia extends AppCompatActivity {
 
     class MyAdapter extends ArrayAdapter<String> {
         Context context;
-        ArrayList<String> ListaIdAsistenciaAr,ListaAsistenciasAr;
+        ArrayList<String> ListaIdAsistenciaAr,ListaAsistenciasAr,ListaRadioBoolean;
         String titulo;
 
-        MyAdapter(Context c,ArrayList<String> ListaIdAsistencia, ArrayList<String> ListaAsistencias, String titulo) {
+        MyAdapter(Context c,ArrayList<String> ListaIdAsistencia, ArrayList<String> ListaAsistencias, String titulo, ArrayList<String> ListaRadioBoolean) {
             super(c, R.layout.row_asistencia, ListaAsistencias);
             this.context = c;
             this.ListaIdAsistenciaAr = ListaIdAsistencia;
             this.ListaAsistenciasAr = ListaAsistencias;
+            this.ListaRadioBoolean = ListaRadioBoolean;
             this.titulo = titulo;
         }
 
@@ -258,6 +362,27 @@ public class Asistencia extends AppCompatActivity {
 
             TextView lblIUser = row.findViewById(R.id.lblIdUserAsistencia);
             TextView lblDatosUser = row.findViewById(R.id.lblUserAsistencia);
+
+            RadioGroup rgAsistio =row.findViewById(R.id.rgAsistio);
+            RadioButton rbSi = row.findViewById(R.id.rbSi);
+            RadioButton rbNo = row.findViewById(R.id.rbNo);
+
+            rgAsistio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                    if (rbSi.isChecked())
+                    {
+                        ListaRadioBoolean.set(position,"SI");
+                    }
+
+                    if (rbNo.isChecked())
+                    {
+                        ListaRadioBoolean.set(position,"NO");
+                    }
+
+                }
+            });
 
             // Asigna los valores
             lblIUser.setText(ListaIdAsistenciaAr.get(position));

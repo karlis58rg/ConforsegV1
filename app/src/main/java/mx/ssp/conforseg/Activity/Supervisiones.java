@@ -185,7 +185,7 @@ public class Supervisiones extends AppCompatActivity {
                 .add("Usuario", modeloAcceso.getUsuario())
                 .build();
         Request request = new Request.Builder()
-                .url("http://c5i-ses.hidalgo.gob.mx/WsConforseg/api/Acceso/")
+                .url("https://c5.hidalgo.gob.mx/WsConforseg/api/Acceso/")
                 .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {

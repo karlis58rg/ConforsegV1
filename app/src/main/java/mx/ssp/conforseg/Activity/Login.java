@@ -25,6 +25,7 @@ import java.io.IOException;
 import mx.ssp.conforseg.Modelo.ModeloUsuarios;
 import mx.ssp.conforseg.R;
 import mx.ssp.conforseg.SqLite.DataHelper;
+import mx.ssp.conforseg.Utilidades.Conexion;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -82,7 +83,7 @@ public class Login extends AppCompatActivity {
 
         final OkHttpClient client = new OkHttpClient();
         final Request request = new Request.Builder()
-                .url("http://c5i-ses.hidalgo.gob.mx/WsConforseg/api/Usuarios?usuario="+modeloUsuarios.getUsuario()+"&passsword="+modeloUsuarios.getContrasena())
+                .url("https://c5.hidalgo.gob.mx/WsConforseg/api/Usuarios?usuario="+modeloUsuarios.getUsuario()+"&passsword="+modeloUsuarios.getContrasena())
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -128,7 +129,7 @@ public class Login extends AppCompatActivity {
         DataHelper dataHelper = new DataHelper(getApplicationContext());
         final OkHttpClient client = new OkHttpClient();
         final Request request = new Request.Builder()
-                .url("http://c5i-ses.hidalgo.gob.mx/WsConforseg/api/Supervisiones?usuario="+cargarUsuario)
+                .url("https://c5.hidalgo.gob.mx/WsConforseg/api/Supervisiones?usuario="+cargarUsuario)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {

@@ -292,7 +292,7 @@ public class EvidenciaMultimedia extends AppCompatActivity {
                 .add("ImageData", cadena)
                 .build();
         Request request = new Request.Builder()
-                .url("http://c5i-ses.hidalgo.gob.mx/WsConforseg/api/MultimediaServicio/")
+                .url("https://c5.hidalgo.gob.mx/WsConforseg/api/MultimediaServicio/")
                 .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {
@@ -315,7 +315,7 @@ public class EvidenciaMultimedia extends AppCompatActivity {
                                 System.out.println("EL DATO  DE LA IMAGEN SE ENVIO CORRECTAMENTE");
                                 //Toast.makeText(getApplicationContext(), "EL DATO SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT).show();
                                 if(numImagen == 1){
-                                    urlImagen = "http://c5i-ses.hidalgo.gob.mx/WsConforseg/api/MultimediaServicio/"+cargarUsuario+"_"+cargarServicio+"_"+numImagen+".jpg";
+                                    urlImagen = "https://c5.hidalgo.gob.mx/WsConforseg/api/MultimediaServicio/"+cargarUsuario+"_"+cargarServicio+"_"+numImagen+".jpg";
                                     insertEvidenciaMultimedia();
                                     imgCam1.setEnabled(false);
                                     btnEvidencia1.setVisibility(View.GONE);
@@ -323,7 +323,7 @@ public class EvidenciaMultimedia extends AppCompatActivity {
                                     imgCam2.setEnabled(true);
                                     imgCam3.setEnabled(true);
                                 }else if(numImagen == 2){
-                                    urlImagen = "http://c5i-ses.hidalgo.gob.mx/WsConforseg/api/MultimediaServicio/"+cargarUsuario+"_"+cargarServicio+"_"+numImagen+".jpg";
+                                    urlImagen = "https://c5.hidalgo.gob.mx/WsConforseg/api/MultimediaServicio/"+cargarUsuario+"_"+cargarServicio+"_"+numImagen+".jpg";
                                     insertEvidenciaMultimedia();
                                     imgCam2.setEnabled(false);
                                     btnEvidencia2.setVisibility(View.GONE);
@@ -331,7 +331,7 @@ public class EvidenciaMultimedia extends AppCompatActivity {
                                     imgCam1.setEnabled(true);
                                     imgCam3.setEnabled(true);
                                 }else{
-                                    urlImagen = "http://c5i-ses.hidalgo.gob.mx/WsConforseg/api/MultimediaServicio/"+cargarUsuario+"_"+cargarServicio+"_"+numImagen+".jpg";
+                                    urlImagen = "https://c5.hidalgo.gob.mx/WsConforseg/api/MultimediaServicio/"+cargarUsuario+"_"+cargarServicio+"_"+numImagen+".jpg";
                                     insertEvidenciaMultimedia();
                                     imgCam3.setEnabled(false);
                                     btnEvidencia3.setVisibility(View.GONE);
@@ -371,7 +371,7 @@ public class EvidenciaMultimedia extends AppCompatActivity {
                 .add("Usuario", modeloMultimedia.getUsuario())
                 .build();
         Request request = new Request.Builder()
-                .url("http://c5i-ses.hidalgo.gob.mx/WsConforseg/api/Incidencias/")
+                .url("https://c5.hidalgo.gob.mx/WsConforseg/api/Incidencias/")
                 .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {

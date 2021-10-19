@@ -77,9 +77,9 @@ public class HomeFragment extends Fragment {
         lyIncidenciasPendientes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "ESTAMOS TRABAJANDO EN ESTA SECCIÓN, LAMENTAMOS LAS MOLESTIAS.", Toast.LENGTH_SHORT).show();
-                //Intent i = new Intent(getActivity(), IncidenciasPendientes.class);
-                //startActivity(i);
+                //Toast.makeText(getActivity(), "ESTAMOS TRABAJANDO EN ESTA SECCIÓN, LAMENTAMOS LAS MOLESTIAS.", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getActivity(), IncidenciasPendientes.class);
+                startActivity(i);
             }
         });
 

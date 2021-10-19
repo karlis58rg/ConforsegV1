@@ -22,6 +22,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/imgHomeWhiteIncidenciasP"
+        android:layout_width="40dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/ic_menu_home"
+        app:layout_constraintBottom_toBottomOf="@+id/imgHeaderBackGroundIncidenciasP"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
         android:id="@+id/imgHeaderWhiteIncidenciasP"
         android:layout_width="200dp"
         android:layout_height="35dp"
@@ -82,27 +92,104 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-
             <LinearLayout
-                android:id="@+id/lyDatosIncidenciasP1"
+                android:id="@+id/lyFolios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lyDatosIncidenciasP"
-                android:layout_marginTop="15dp"
-                android:orientation="horizontal">
+                android:elevation="50dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/lyDatosIncidenciasP">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    android:layout_weight="0.10"
+                    android:gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/boton_rows_contenedor">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="FOLIO"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    android:layout_weight="0.10"
+                    android:gravity="center"
+                    android:background="@drawable/boton_rows_contenedor">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="FECHA"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    android:layout_weight="0.10"
+                    android:gravity="center"
+                    android:background="@drawable/boton_rows_contenedor">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="USUARIO"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    android:layout_weight="0.10"
+                    android:gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/boton_rows_contenedor">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="NOTAS"/>
+                </LinearLayout>
 
-                <ListView
-                    android:id="@+id/listAsistenciasPendientes"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/lyFolios2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="50dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/lyFolios">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    android:layout_weight="0.10"
+                    android:gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
+                    <ListView
+                        android:id="@+id/listAsistenciasPendientes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/lyDatosIncidenciasP2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lyDatosIncidenciasP1"
+                android:layout_below="@id/lyFolios2"
                 android:layout_marginTop="15dp"
                 android:orientation="horizontal">
 
