@@ -205,7 +205,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@color/white"
-                        android:text="Servicio Publico:" />
+                        android:text="Visitantes Peatonales:" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -216,7 +216,7 @@
                     android:weightSum="1">
 
                     <EditText
-                        android:id="@+id/txtServicioPublico"
+                        android:id="@+id/txtVisitantesPeatonales"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
@@ -248,9 +248,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:textColor="@color/white"
-                        android:text="Visitante:" />
+                        android:text="Visitantes en Vehiculo:" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -261,7 +260,7 @@
                     android:weightSum="1">
 
                     <EditText
-                        android:id="@+id/txtVisitante"
+                        android:id="@+id/txtVisitanteenVehiculo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
@@ -293,9 +292,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:textColor="@color/white"
-                        android:text="Proveedores:" />
+                        android:text="Empledas Domésticas:" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -306,7 +304,7 @@
                     android:weightSum="1">
 
                     <EditText
-                        android:id="@+id/txtProveedores"
+                        android:id="@+id/txtEmpleadasDomesticas"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
@@ -338,9 +336,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:textColor="@color/white"
-                        android:text="Peatones:" />
+                        android:text="Trabajador en Vehículo:" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -351,7 +348,7 @@
                     android:weightSum="1">
 
                     <EditText
-                        android:id="@+id/txtPeatones"
+                        android:id="@+id/txtTrabajadorenVehiculo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
@@ -370,6 +367,97 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lyDatos6"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:text="Trabajador Peatonal:" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+
+                    <EditText
+                        android:id="@+id/txtTrabajadorPeatonal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:maxLength="3"
+                        android:inputType="number"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textAlignment="center"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyDatos8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lyDatos7"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="Accesos Autorizados por Residentes sin Credencial:" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+
+                    <EditText
+                        android:id="@+id/txtAccesoARC"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:maxLength="3"
+                        android:inputType="number"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textAlignment="center"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/lyDatos9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lyDatos8"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -411,10 +499,10 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/lyDatos8"
+                android:id="@+id/lyDatos10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lyDatos7"
+                android:layout_below="@id/lyDatos9"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -456,10 +544,10 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/lyDatos9"
+                android:id="@+id/lyDatos11"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lyDatos8"
+                android:layout_below="@id/lyDatos10"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -501,10 +589,10 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/lyDatos10"
+                android:id="@+id/lyDatos12"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lyDatos9"
+                android:layout_below="@id/lyDatos11"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -549,7 +637,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lyDatos10"
+                android:layout_below="@id/lyDatos12"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:layout_marginBottom="10dp"

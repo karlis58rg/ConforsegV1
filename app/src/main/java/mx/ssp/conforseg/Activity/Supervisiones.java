@@ -52,8 +52,8 @@ public class Supervisiones extends AppCompatActivity {
     SharedPreferences share;
     String cargarServicio,cargarUsuario,
             latitud = "null",longitud="null";
-    EditText txtFechaRegistroSup,txtTaxis,txtServicioPublico,txtVisitante,
-            txtProveedores,txtPeatones,txtEmpleados,txtIncidentes,txtRecorridos,txtOtros;
+    EditText txtFechaRegistroSup,txtTaxis,txtVisitantesPeatonales,txtVisitanteenVehiculo,
+            txtEmpleadasDomesticas,txtTrabajadorenVehiculo,txtTrabajadorPeatonal,txtAccesoARC,txtEmpleados,txtIncidentes,txtRecorridos,txtOtros;
     ImageView imgHomeWhiteSupervisiones,imgLogOutWhiteSupervisiones;
     Funciones funciones;
     /*************************************************************/
@@ -72,10 +72,12 @@ public class Supervisiones extends AppCompatActivity {
         lblServiciosSuperviciones = findViewById(R.id.lblServiciosSuperviciones);
         txtFechaRegistroSup = findViewById(R.id.txtFechaRegistroSup);
         txtTaxis = findViewById(R.id.txtTaxis);
-        txtServicioPublico = findViewById(R.id.txtServicioPublico);
-        txtVisitante = findViewById(R.id.txtVisitante);
-        txtProveedores = findViewById(R.id.txtProveedores);
-        txtPeatones = findViewById(R.id.txtPeatones);
+        txtVisitantesPeatonales = findViewById(R.id. txtVisitantesPeatonales);
+        txtVisitanteenVehiculo = findViewById(R.id.txtVisitanteenVehiculo);
+        txtEmpleadasDomesticas = findViewById(R.id.txtEmpleadasDomesticas);
+        txtTrabajadorenVehiculo = findViewById(R.id.txtTrabajadorenVehiculo);
+        txtTrabajadorPeatonal= findViewById(R.id.txtTrabajadorPeatonal);
+        txtAccesoARC = findViewById(R.id.txtAccesoARC);
         txtEmpleados = findViewById(R.id.txtEmpleados);
         txtIncidentes = findViewById(R.id.txtIncidentes);
         txtRecorridos = findViewById(R.id.txtRecorridos);
@@ -132,18 +134,24 @@ public class Supervisiones extends AppCompatActivity {
         if(txtTaxis.getText().toString().isEmpty()){
             txtTaxis.setText("0");
         }
-        if( txtServicioPublico.getText().toString().isEmpty())
+        if( txtVisitantesPeatonales.getText().toString().isEmpty())
         {
-            txtServicioPublico.setText("0");
+            txtVisitantesPeatonales.setText("0");
         }
-        if(txtVisitante.getText().toString().isEmpty()){
-            txtVisitante.setText("0");
+        if(txtVisitanteenVehiculo.getText().toString().isEmpty()){
+            txtVisitanteenVehiculo.setText("0");
         }
-        if(txtProveedores.getText().toString().isEmpty()){
-            txtProveedores.setText("0");
+        if(txtEmpleadasDomesticas.getText().toString().isEmpty()){
+            txtEmpleadasDomesticas.setText("0");
         }
-        if(txtPeatones.getText().toString().isEmpty()){
-            txtPeatones.setText("0");
+        if(txtTrabajadorenVehiculo.getText().toString().isEmpty()){
+            txtTrabajadorenVehiculo.setText("0");
+        }
+        if(txtTrabajadorPeatonal.getText().toString().isEmpty()) {
+            txtTrabajadorPeatonal.setText("0");
+        }
+        if(txtAccesoARC.getText().toString().isEmpty()) {
+            txtAccesoARC.setText("0");
         }
         if(txtEmpleados.getText().toString().isEmpty()){
             txtEmpleados.setText("0");
@@ -167,8 +175,8 @@ public class Supervisiones extends AppCompatActivity {
         latitud = String.valueOf(lat);
         ModeloAcceso modeloAcceso = new ModeloAcceso
                 (idServicio, txtFechaRegistroSup.getText().toString(), txtTaxis.getText().toString(),
-                       txtServicioPublico.getText().toString(), txtVisitante.getText().toString(), txtProveedores.getText().toString(),
-                        txtPeatones.getText().toString(), txtEmpleados.getText().toString(), txtIncidentes.getText().toString(), txtRecorridos.getText().toString(),
+                       txtVisitantesPeatonales.getText().toString(), txtVisitanteenVehiculo.getText().toString(), txtEmpleadasDomesticas.getText().toString(),
+                        txtTrabajadorenVehiculo.getText().toString(), txtTrabajadorPeatonal.getText().toString(), txtAccesoARC.getText().toString(), txtEmpleados.getText().toString(), txtIncidentes.getText().toString(), txtRecorridos.getText().toString(),
                         txtOtros.getText().toString(),longitud, latitud, cargarUsuario);
 
         OkHttpClient client = new OkHttpClient();
@@ -176,10 +184,12 @@ public class Supervisiones extends AppCompatActivity {
                 .add("IdServicio", modeloAcceso.getIdServicio())
                 .add("Fecha", modeloAcceso.getFecha())
                 .add("Taxi", modeloAcceso.getTaxi())
-                .add("SerPublicos", modeloAcceso.getSerPublicos())
-                .add("Visitante", modeloAcceso.getVisitante())
-                .add("Proveedores", modeloAcceso.getProveedores())
-                .add("Peatones", modeloAcceso.getPeatones())
+                .add("VistitantesPeatonales", modeloAcceso.getSerPublicos())
+                .add("VisitanteEnVehiculo", modeloAcceso.getVisitante())
+                .add("EmpleadasDomesticas", modeloAcceso.getProveedores())
+                .add("TrabajadorEnVehiculo", modeloAcceso.getPeatones())
+                .add("TrabajadorPeatonal", modeloAcceso.getPeatones())
+                .add("AccesoARC", modeloAcceso.getPeatones())
                 .add("Empleados", modeloAcceso.getEmpleados())
                 .add("Incidentes", modeloAcceso.getIncidentes())
                 .add("Recorridos", modeloAcceso.getRecorridos())
@@ -238,10 +248,12 @@ public class Supervisiones extends AppCompatActivity {
     public void limpiarCampos(){
         txtFechaRegistroSup.setText("");
         txtTaxis.setText("");
-        txtServicioPublico.setText("");
-        txtVisitante.setText("");
-        txtProveedores.setText("");
-        txtPeatones.setText("");
+        txtVisitantesPeatonales.setText("");
+        txtVisitanteenVehiculo.setText("");
+        txtEmpleadasDomesticas.setText("");
+        txtTrabajadorenVehiculo.setText("");
+        txtTrabajadorPeatonal.setText("");
+        txtAccesoARC.setText("");
         txtEmpleados.setText("");
         txtIncidentes.setText("");
         txtRecorridos.setText("");

@@ -18,7 +18,7 @@ public class ModeloAcceso {
     private String Usuario;
 
 
-    public ModeloAcceso(String idServicio, String fecha, String taxi, String serPublicos, String visitante, String proveedores,
+    public ModeloAcceso(String servicio, String s, String idServicio, String fecha, String taxi, String serPublicos, String visitante, String proveedores,
                         String peatones, String empleados, String incidentes, String recorridos, String otros,
                         String longitud, String latitud, String usuario) {
         IdServicio = idServicio;

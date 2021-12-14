@@ -196,17 +196,17 @@ public class Asistencia extends AppCompatActivity {
                                 //AGREGA LOS DATOS AL LISTVIEW MEDIANTE EL ADAPTADOR
                                 Asistencia.MyAdapter adapter = new Asistencia.MyAdapter(getApplicationContext(),ListaIdAsistencia, ListaAsistencia, "Nombre",ListaRadioBoolean);
                                 listAsistenciasPrincipal.setAdapter(adapter);
-                                funciones.ajustaAlturaListView(listAsistenciasPrincipal,250);
+                                funciones.ajustaAlturaListView(listAsistenciasPrincipal,440);
                                 funciones.ProcesandoDissmis(Asistencia.this);
                                 //*************************
                             }
                         });
                     } catch (Exception e) {
-                        //Toast.makeText(getApplicationContext(), "ERROR AL CONSULTAR ANEXO C, POR FAVOR VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_SHORT).show();
-                        toast = Toast.makeText(getApplicationContext(), "ERROR AL CONSULTAR ANEXO C, POR FAVOR VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_SHORT);
+                        Toast.makeText(getApplicationContext(), "ERROR AL CONSULTAR ANEXO C, POR FAVOR VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_SHORT).show();
+                        /*toast = Toast.makeText(getApplicationContext(), "ERROR AL CONSULTAR ANEXO C, POR FAVOR VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_SHORT);
                         TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
                         if( v != null) v.setGravity(Gravity.CENTER);
-                        toast.show();
+                        toast.show();*/
                         funciones.ProcesandoDissmis(Asistencia.this);
                     }
 
