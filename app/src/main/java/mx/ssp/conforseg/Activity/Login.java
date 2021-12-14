@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import mx.ssp.conforseg.Modelo.ModeloUsuarios;
 import mx.ssp.conforseg.R;
@@ -167,6 +169,7 @@ public class Login extends AppCompatActivity {
                                                 e.printStackTrace();
                                             }
                                         }
+                                        ListServicios();
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -180,6 +183,19 @@ public class Login extends AppCompatActivity {
             }
 
         });
+    }
+
+    /**************** SPINNER **************************************/
+    private void ListServicios() {
+        DataHelper dataHelper = new DataHelper(getApplication());
+        ArrayList<String> list = dataHelper.getAllTempoServiciosSup();
+        if (list.size() > 0) {
+            Toast.makeText(getApplication(), "CUENTA CON SERVICIOS ACTIVOS.", Toast.LENGTH_LONG).show();
+            System.out.println("YA EXISTE INFORMACIÓN DE SERVICIOS");
+        }else{
+            System.out.println("NO CUENTA CON SERVICIOS ACTIVOS");
+            Toast.makeText(getApplication(), "LO SENTIMOS, NO CUENTA CON SERVICIOS ACTIVOS.", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void cargarDatos() {

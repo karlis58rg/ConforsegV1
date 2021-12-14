@@ -18,6 +18,7 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,6 +56,7 @@ public class Incidencias extends AppCompatActivity {
     /*************************************************************/
     Double lat,lon;
     String mensaje1,mensaje2;
+    Toast toast;
 
 
     @Override
@@ -83,7 +85,7 @@ public class Incidencias extends AppCompatActivity {
                 }else if(latitud.equals("null")&&longitud.equals("null")){
                     Toast.makeText(getApplicationContext(), "LO SENTIMOS, DEBE HABILITAR LOS SERVICIOS DE GPS. ", Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(getApplicationContext(), "ESTAMOS PROCESANDO SU SOLICITUD, UN MOMENTO POR FAVOR", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "ESTAMOS PROCESANDO SU SOLICITUD, UN MOMENTO POR FAVOR", Toast.LENGTH_SHORT).show();
                     insertIncidencias();
                 }
             }
@@ -192,6 +194,10 @@ public class Incidencias extends AppCompatActivity {
                                 System.out.println("EL DATO SE ENVIO CORRECTAMENTE");
                                 txtObservacionesIncidencias.setText("");
                                 Toast.makeText(getApplicationContext(), "EL DATO SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT).show();
+                                /*toast = Toast.makeText(getApplicationContext(), "EL DATO SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT);
+                                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                                if( v != null) v.setGravity(Gravity.CENTER);
+                                toast.show();*/
                             }else{
                                 Toast.makeText(getApplicationContext(), "LO SENTIMOS, SU INFORMACIÓN NO PUDO SER ENVIADA CORRECTAMENTE, FAVOR DE INTENTARLO NUEVAMENTE ", Toast.LENGTH_SHORT).show();
                             }

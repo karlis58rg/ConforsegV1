@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,9 +20,11 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,17 +39,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
 import mx.ssp.conforseg.Fragment.Servicios;
+import mx.ssp.conforseg.Modelo.ModeloIncidencias;
+import mx.ssp.conforseg.Modelo.ModeloIncidenciasPendientes;
 import mx.ssp.conforseg.R;
+import mx.ssp.conforseg.SqLite.DataHelper;
 import mx.ssp.conforseg.Utilidades.Funciones;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class IncidenciasPendientes extends AppCompatActivity {
@@ -57,11 +68,14 @@ public class IncidenciasPendientes extends AppCompatActivity {
     private static final  int REQ_CODE_SPEECH_INPUT=100;
     String cargarServicio, cargarUsuario,latitud = "null", longitud = "null";
     Double lat, lon;
-    String mensaje1, mensaje2;
+    String mensaje1, mensaje2,DataFormatString;
     SharedPreferences share;
     ArrayList<String> ListaFolio,ListaFecha,ListaUsuario,ListaNota;
     String[] ArrayListaFolio;
     Funciones funciones;
+    TextView lblFolioIPRespuesta,lblServiciosIncidenciasP;
+    int PosicionIPSeleccionado = -1;
+    Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +83,17 @@ public class IncidenciasPendientes extends AppCompatActivity {
         setContentView(R.layout.activity_incidencias_pendientes);
         cargarDatos();
         cargarIncidenciasPendientes();
+        locationStart();
         listAsistenciasPendientes = findViewById(R.id.listAsistenciasPendientes);
         txtObservacionesIncidenciasP = findViewById(R.id.txtObservacionesIncidenciasP);
         btnIncidenciasP = findViewById(R.id.btnIncidenciasP);
         imgMicrofonoIncidenciasP = findViewById(R.id.imgMicrofonoIncidenciasP);
         imgHomeWhiteIncidenciasP = findViewById(R.id.imgHomeWhiteIncidenciasP);
+        lblFolioIPRespuesta = findViewById(R.id.lblFolioIPRespuesta);
+        lblServiciosIncidenciasP = findViewById(R.id.lblServiciosIncidenciasP);
         funciones = new Funciones();
+        funciones.Procesando(IncidenciasPendientes.this,"","CARGANDO INCIDENCIAS, UN MOMENTO POR FAVOR...");
+        lblServiciosIncidenciasP.setText(cargarServicio);
 
         btnIncidenciasP.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +107,7 @@ public class IncidenciasPendientes extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "LO SENTIMOS, DEBE HABILITAR LOS SERVICIOS DE GPS. ", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getApplicationContext(), "ESTAMOS PROCESANDO SU SOLICITUD, UN MOMENTO POR FAVOR", Toast.LENGTH_SHORT).show();
+                    insertIncidenciasPendientes();
                 }
             }
         });
@@ -105,6 +125,89 @@ public class IncidenciasPendientes extends AppCompatActivity {
                 Intent i = new Intent(IncidenciasPendientes.this, Servicios.class);
                 startActivity(i);
                 finish();
+            }
+        });
+
+        listAsistenciasPendientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                try {
+                    String Json = ArrayListaFolio[position];
+                    JSONObject jsonjObject = new JSONObject(Json + "}");
+                    PosicionIPSeleccionado = position;
+                    lblFolioIPRespuesta.setText(((jsonjObject.getString("Folio")).equals("null")?"":jsonjObject.getString("Folio")));
+
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "ERROR AL DESEREALIZAR EL JSON", Toast.LENGTH_SHORT).show();
+                    Log.i("DETENCIONES", e.toString());
+                }
+
+            }
+        });
+    }
+
+    private void insertIncidenciasPendientes() {
+        System.out.println("INSERT");
+        DataHelper dataHelper = new DataHelper(getApplication());
+        int idDescServicio = dataHelper.getIdTempoServiciosSup(cargarServicio);
+        String idServicio = String.valueOf(idDescServicio);
+
+        longitud = String.valueOf(lon);
+        latitud = String.valueOf(lat);
+
+        ModeloIncidenciasPendientes modeloIncidenciasPendientes = new ModeloIncidenciasPendientes
+                (lblFolioIPRespuesta.getText().toString(),"2", idServicio, txtObservacionesIncidenciasP.getText().toString(),
+                        latitud, longitud, cargarUsuario);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("Folio", modeloIncidenciasPendientes.getFolio())
+                .add("IdNota", modeloIncidenciasPendientes.getIdNota())
+                .add("IdServicio", modeloIncidenciasPendientes.getIdServicio())
+                .add("Nota", modeloIncidenciasPendientes.getNota())
+                .add("Latitud", modeloIncidenciasPendientes.getLatitud())
+                .add("Longitud", modeloIncidenciasPendientes.getLongitud())
+                .add("Usuario", modeloIncidenciasPendientes.getUsuario())
+                .build();
+        Request request = new Request.Builder()
+                .url("https://c5.hidalgo.gob.mx/WsConforseg/api/IncidenciasPendientes/")
+                .post(body)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                Looper.prepare(); // to be able to make toast
+                Toast.makeText(getApplicationContext(), "ERROR AL ENVIAR SU REGISTRO, POR FAVOR VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_LONG).show();
+                Looper.loop();
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String myResponse = response.body().string();
+                    IncidenciasPendientes.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String resp = myResponse;
+                            if(resp.equals("true")){
+                                System.out.println("EL DATO SE ENVIO CORRECTAMENTE");
+                                txtObservacionesIncidenciasP.setText("");
+                                lblFolioIPRespuesta.setText("");
+                                cargarIncidenciasPendientes();
+                                Toast.makeText(getApplicationContext(), "EL DATO SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT).show();
+                                /*toast = Toast.makeText(getApplicationContext(), "EL DATO SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT);
+                                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                                if( v != null) v.setGravity(Gravity.CENTER);
+                                toast.show();*/
+                            }else{
+                                Toast.makeText(getApplicationContext(), "LO SENTIMOS, SU INFORMACIÓN NO PUDO SER ENVIADA CORRECTAMENTE, FAVOR DE INTENTARLO NUEVAMENTE ", Toast.LENGTH_SHORT).show();
+                            }
+                            Log.i("HERE", resp);
+                        }
+                    });
+                }
             }
         });
     }
@@ -227,6 +330,7 @@ public class IncidenciasPendientes extends AppCompatActivity {
     public void cargarIncidenciasPendientes() {
         System.out.println("BUSCANDO DATOS");
 
+
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url("https://c5.hidalgo.gob.mx/WsConforseg/api/IncidenciasPendientes?usuario=" + cargarUsuario)
@@ -239,6 +343,7 @@ public class IncidenciasPendientes extends AppCompatActivity {
                 e.printStackTrace();
                 Looper.prepare(); // to be able to make toast
                 Toast.makeText(getApplicationContext(), "ERROR AL CONSULTAR OBJETOS, POR FAVOR VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_LONG).show();
+                funciones.ProcesandoDissmis(IncidenciasPendientes.this);
                 Looper.loop();
             }
 
@@ -274,7 +379,6 @@ public class IncidenciasPendientes extends AppCompatActivity {
                                     //SEPARAR CADA detenido EN UN ARREGLO
                                     String[] ArrayIncidenciasPendientesList = ArregloJson.split(Pattern.quote("},"));
                                     ArrayListaFolio = ArrayIncidenciasPendientesList;
-
                                     Log.i("Asistencia", "ArrayListaDelictivo:" + ArrayIncidenciasPendientesList[0]);
 
                                     //RECORRE EL ARREGLO PARA AGREGAR EL FOLIO CORRESPONDIENTE DE CADA OBJETJSN
@@ -286,8 +390,11 @@ public class IncidenciasPendientes extends AppCompatActivity {
                                             ListaFolio.add(
                                                     ((jsonjObject.getString("Folio")).equals("null") ? " - " : jsonjObject.getString("Folio"))
                                             );
-                                            ListaFecha.add(
-                                                    ((jsonjObject.getString("Fecha")).equals("null") ? " - " : jsonjObject.getString("Fecha"))
+
+                                            String fechaJson = jsonjObject.getString("Fecha");
+                                            fechaJson = fechaJson.replaceAll("T00:00:00","");
+                                            ListaFecha.add(String.valueOf((fechaJson))
+                                                    //((jsonjObject.getString("Fecha")).equals("null") ? " - " : jsonjObject.getString("Fecha"))
                                             );
                                             ListaUsuario.add(
                                                     ((jsonjObject.getString("Usuario")).equals("null") ? " - " : jsonjObject.getString("Usuario"))
@@ -295,7 +402,6 @@ public class IncidenciasPendientes extends AppCompatActivity {
                                             ListaNota.add(
                                                     ((jsonjObject.getString("Nota")).equals("null") ? " - " : jsonjObject.getString("Nota"))
                                             );
-                                            //ListaRadioBoolean.add("NO");
 
                                         } catch (JSONException e) {
                                             Log.i("ASISTENCIAS", "catch:" + e.toString());
@@ -308,14 +414,17 @@ public class IncidenciasPendientes extends AppCompatActivity {
                                 }
 
                                 //AGREGA LOS DATOS AL LISTVIEW MEDIANTE EL ADAPTADOR
-                                IncidenciasPendientes.MyAdapter adapter = new IncidenciasPendientes.MyAdapter(getApplicationContext(),ListaFolio, ListaFecha, ListaUsuario,ListaNota);
+                                MyAdapter adapter = new MyAdapter(getApplicationContext(),ListaFolio, ListaFecha, ListaUsuario,ListaNota);
                                 listAsistenciasPendientes.setAdapter(adapter);
                                 funciones.ajustaAlturaListView(listAsistenciasPendientes,250);
+                                funciones.ProcesandoDissmis(IncidenciasPendientes.this);
+
                                 //*************************
                             }
                         });
                     } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), "ERROR AL CONSULTAR ANEXO C, POR FAVOR VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "ERROR AL CONSULTAR LA INFORMACIÓN, POR FAVOR VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_SHORT).show();
+                        funciones.ProcesandoDissmis(IncidenciasPendientes.this);
                     }
 
                 }

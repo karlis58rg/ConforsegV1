@@ -18,11 +18,13 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -39,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+import mx.ssp.conforseg.Fragment.Servicios;
 import mx.ssp.conforseg.Modelo.ModeloAsistencia;
 import mx.ssp.conforseg.Modelo.ModeloIncidencias;
 import mx.ssp.conforseg.R;
@@ -63,9 +66,11 @@ public class Asistencia extends AppCompatActivity {
     String cargarServicio, cargarUsuario,fecha,
             latitud = "null", longitud = "null";
     Funciones funciones;
+    ImageView imgHomeWhiteAsistencia;
     /*************************************************************/
     Double lat, lon;
     String mensaje1, mensaje2;
+    Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,14 +82,19 @@ public class Asistencia extends AppCompatActivity {
         lblServiciosAsistencia = findViewById(R.id.lblServiciosAsistencia);
         btnAsistencias = findViewById(R.id.btnAsistencias);
         listAsistenciasPrincipal = findViewById(R.id.listAsistenciasPrincipal);
+        imgHomeWhiteAsistencia = findViewById(R.id.imgHomeWhiteAsistencia);
         funciones = new Funciones();
-
+        funciones.Procesando(Asistencia.this,"","CARGANDO ASISTENCIAS, UN MOMENTO POR FAVOR...");
         lblServiciosAsistencia.setText(cargarServicio);
 
         btnAsistencias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "ESTAMOS PROCESANDO SU SOLICITUD, UN MOMENTO POR FAVOR", Toast.LENGTH_SHORT).show();
+                /*toast = Toast.makeText(getApplicationContext(), "ESTAMOS PROCESANDO SU SOLICITUD, UN MOMENTO POR FAVOR", Toast.LENGTH_SHORT);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                if( v != null) v.setGravity(Gravity.CENTER);
+                toast.show();*/
                 for(int i = 0; i< listAsistenciasPrincipal.getCount();i++)
                 {
                     Log.i("LIBRETA",ListaIdAsistencia.get(i));
@@ -92,6 +102,15 @@ public class Asistencia extends AppCompatActivity {
                     Log.i("LIBRETA",ListaRadioBoolean.get(i));
                     insertAsistencias(ListaIdAsistencia.get(i),ListaRadioBoolean.get(i));
                 }
+            }
+        });
+
+        imgHomeWhiteAsistencia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Asistencia.this, Servicios.class);
+                startActivity(i);
+                finish();
             }
         });
     }
@@ -115,6 +134,7 @@ public class Asistencia extends AppCompatActivity {
                 e.printStackTrace();
                 Looper.prepare(); // to be able to make toast
                 Toast.makeText(getApplicationContext(), "ERROR AL CONSULTAR OBJETOS, POR FAVOR VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_LONG).show();
+                funciones.ProcesandoDissmis(Asistencia.this);
                 Looper.loop();
             }
 
@@ -177,11 +197,17 @@ public class Asistencia extends AppCompatActivity {
                                 Asistencia.MyAdapter adapter = new Asistencia.MyAdapter(getApplicationContext(),ListaIdAsistencia, ListaAsistencia, "Nombre",ListaRadioBoolean);
                                 listAsistenciasPrincipal.setAdapter(adapter);
                                 funciones.ajustaAlturaListView(listAsistenciasPrincipal,250);
+                                funciones.ProcesandoDissmis(Asistencia.this);
                                 //*************************
                             }
                         });
                     } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), "ERROR AL CONSULTAR ANEXO C, POR FAVOR VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "ERROR AL CONSULTAR ANEXO C, POR FAVOR VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_SHORT).show();
+                        toast = Toast.makeText(getApplicationContext(), "ERROR AL CONSULTAR ANEXO C, POR FAVOR VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_SHORT);
+                        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                        if( v != null) v.setGravity(Gravity.CENTER);
+                        toast.show();
+                        funciones.ProcesandoDissmis(Asistencia.this);
                     }
 
                 }
@@ -239,8 +265,16 @@ public class Asistencia extends AppCompatActivity {
                             if(resp.equals("true")){
                                 System.out.println("EL DATO SE ENVIO CORRECTAMENTE");
                                 Toast.makeText(getApplicationContext(), "EL DATO SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT).show();
+                                /*toast = Toast.makeText(getApplicationContext(), "EL DATO SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT);
+                                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                                if( v != null) v.setGravity(Gravity.CENTER);
+                                toast.show();*/
                             }else{
                                 Toast.makeText(getApplicationContext(), "LO SENTIMOS, USTED YA COMPLETÓ EL FORMULARIO DE ASISTENCIAS DEL DÍA", Toast.LENGTH_SHORT).show();
+                                /*toast = Toast.makeText(getApplicationContext(), "LO SENTIMOS, USTED YA COMPLETÓ EL FORMULARIO DE ASISTENCIAS DEL DÍA", Toast.LENGTH_SHORT);
+                                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                                if( v != null) v.setGravity(Gravity.CENTER);
+                                toast.show();*/
                             }
                             Log.i("HERE", resp);
                         }

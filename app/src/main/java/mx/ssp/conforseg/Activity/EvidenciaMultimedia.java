@@ -18,11 +18,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -57,18 +60,24 @@ public class EvidenciaMultimedia extends AppCompatActivity {
     int numImagen = 0;
     String cadena = "";
     SharedPreferences share;
-    String cargarServicio,cargarUsuario,fecha,urlImagen,
+    SharedPreferences.Editor editor;
+    String cargarServicio,cargarUsuario,fecha,hora,varDospositivo="motorola",urlImagen,guardarInfoDispositivo,cargarInfoDispositivo,
             latitud = "null",longitud="null";
     ImageView imgHomeWhiteEMultimedia,imgLogOutWhiteEMultimedia;
     /*************************************************************/
     Double lat,lon;
     String mensaje1,mensaje2;
+    Toast toast;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evidencia_multimedia);
         cargarDatos();
+        obtenerNombreDeDispositivo();
+        guardarDispositivo();
+        locationStart();
         lblServiciosEMultimedia = findViewById(R.id.lblServiciosEMultimedia);
         imgEvidencia1 = findViewById(R.id.imgEvidencia1);
         imgCam1 = findViewById(R.id.imgCam1);
@@ -95,6 +104,7 @@ public class EvidenciaMultimedia extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(ContextCompat.checkSelfPermission(EvidenciaMultimedia.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+                    System.out.println("BOTON 1");
                     numImagen = 1;
                     imgCam2.setEnabled(false);
                     imgCam3.setEnabled(false);
@@ -170,6 +180,7 @@ public class EvidenciaMultimedia extends AppCompatActivity {
         btnEvidencia1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println("BOTON 1 ENVIAR");
                 if(numImagen == 1 && cadena.length() > 0){
                     insertImagen();
                 }else{
@@ -220,15 +231,40 @@ public class EvidenciaMultimedia extends AppCompatActivity {
     }
 
     private void llamarItemAvatar() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+       /* Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }*/
+        if(cargarInfoDispositivo.equals(varDospositivo)){
+            Intent takePictureIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            takePictureIntent.setType("image/");
+            startActivityForResult(takePictureIntent.createChooser(takePictureIntent,"Selecciona la aplicación"),REQUEST_IMAGE_CAPTURE);
+        }else{
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+        if(cargarInfoDispositivo.equals(varDospositivo) && requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK ){
+            Uri path = data.getData();
+            if(numImagen == 1){
+                imgEvidencia1.setImageURI(path);
+                imagenBase64();
+                imgCam1.setVisibility(View.GONE);
+            }else if(numImagen == 2){
+                imgEvidencia2.setImageURI(path);
+                imagenBase64();
+                imgCam2.setVisibility(View.GONE);
+            }else{
+                imgEvidencia3.setImageURI(path);
+                imagenBase64();
+                imgCam3.setVisibility(View.GONE);
+            }
+        }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             if(numImagen == 1){
@@ -286,9 +322,14 @@ public class EvidenciaMultimedia extends AppCompatActivity {
     }
 
     public void insertImagen() {
+        //*************** HORA **********************//
+        Date time = new Date();
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        hora = timeFormat.format(time);
+        hora = hora.replaceAll(":","");
         OkHttpClient client = new OkHttpClient();
         RequestBody body = new FormBody.Builder()
-                .add("Description", cargarUsuario+"_"+cargarServicio+"_"+numImagen+".jpg")
+                .add("Description", cargarUsuario+"_"+cargarServicio+"_"+numImagen+"_"+hora+".jpg")
                 .add("ImageData", cadena)
                 .build();
         Request request = new Request.Builder()
@@ -313,9 +354,13 @@ public class EvidenciaMultimedia extends AppCompatActivity {
                             String resp = myResponse;
                             if(resp.equals("true")){
                                 System.out.println("EL DATO  DE LA IMAGEN SE ENVIO CORRECTAMENTE");
-                                //Toast.makeText(getApplicationContext(), "EL DATO SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "EL DATO SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT).show();
+                                /*toast = Toast.makeText(getApplicationContext(), "EL DATO SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT);
+                                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                                if( v != null) v.setGravity(Gravity.CENTER);
+                                toast.show();*/
                                 if(numImagen == 1){
-                                    urlImagen = "https://c5.hidalgo.gob.mx/WsConforseg/api/MultimediaServicio/"+cargarUsuario+"_"+cargarServicio+"_"+numImagen+".jpg";
+                                    urlImagen = "https://c5.hidalgo.gob.mx/WsConforseg/MultimediaServicio/"+cargarUsuario+"_"+cargarServicio+"_"+numImagen+"_"+hora+".jpg";
                                     insertEvidenciaMultimedia();
                                     imgCam1.setEnabled(false);
                                     btnEvidencia1.setVisibility(View.GONE);
@@ -323,7 +368,7 @@ public class EvidenciaMultimedia extends AppCompatActivity {
                                     imgCam2.setEnabled(true);
                                     imgCam3.setEnabled(true);
                                 }else if(numImagen == 2){
-                                    urlImagen = "https://c5.hidalgo.gob.mx/WsConforseg/api/MultimediaServicio/"+cargarUsuario+"_"+cargarServicio+"_"+numImagen+".jpg";
+                                    urlImagen = "https://c5.hidalgo.gob.mx/WsConforseg/MultimediaServicio/"+cargarUsuario+"_"+cargarServicio+"_"+numImagen+"_"+hora+".jpg";
                                     insertEvidenciaMultimedia();
                                     imgCam2.setEnabled(false);
                                     btnEvidencia2.setVisibility(View.GONE);
@@ -331,7 +376,7 @@ public class EvidenciaMultimedia extends AppCompatActivity {
                                     imgCam1.setEnabled(true);
                                     imgCam3.setEnabled(true);
                                 }else{
-                                    urlImagen = "https://c5.hidalgo.gob.mx/WsConforseg/api/MultimediaServicio/"+cargarUsuario+"_"+cargarServicio+"_"+numImagen+".jpg";
+                                    urlImagen = "https://c5.hidalgo.gob.mx/WsConforseg/MultimediaServicio/"+cargarUsuario+"_"+cargarServicio+"_"+numImagen+"_"+hora+".jpg";
                                     insertEvidenciaMultimedia();
                                     imgCam3.setEnabled(false);
                                     btnEvidencia3.setVisibility(View.GONE);
@@ -351,6 +396,11 @@ public class EvidenciaMultimedia extends AppCompatActivity {
     }
 
     private void insertEvidenciaMultimedia() {
+
+        DataHelper dataHelper = new DataHelper(getApplication());
+        int idDescServicio = dataHelper.getIdTempoServiciosSup(cargarServicio);
+        String idServicio = String.valueOf(idDescServicio);
+
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         fecha = dateFormat.format(date);
@@ -359,7 +409,7 @@ public class EvidenciaMultimedia extends AppCompatActivity {
         latitud = String.valueOf(lat);
 
         ModeloMultimedia modeloMultimedia = new ModeloMultimedia
-                (cargarServicio, fecha, urlImagen, longitud, latitud,cargarUsuario);
+                (idServicio, fecha, urlImagen, longitud, latitud,cargarUsuario);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody body = new FormBody.Builder()
@@ -371,7 +421,7 @@ public class EvidenciaMultimedia extends AppCompatActivity {
                 .add("Usuario", modeloMultimedia.getUsuario())
                 .build();
         Request request = new Request.Builder()
-                .url("https://c5.hidalgo.gob.mx/WsConforseg/api/Incidencias/")
+                .url("https://c5.hidalgo.gob.mx/WsConforseg/api/EvidenciaMultimedia/")
                 .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {
@@ -393,6 +443,10 @@ public class EvidenciaMultimedia extends AppCompatActivity {
                             if(resp.equals("true")){
                                 System.out.println("EL DATO SE ENVIO CORRECTAMENTE");
                                 Toast.makeText(getApplicationContext(), "EL DATO SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT).show();
+                                /*toast = Toast.makeText(getApplicationContext(), "EL DATO SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT);
+                                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                                if( v != null) v.setGravity(Gravity.CENTER);
+                                toast.show();*/
                             }else{
                                 Toast.makeText(getApplicationContext(), "LO SENTIMOS, SU INFORMACIÓN NO PUDO SER ENVIADA CORRECTAMENTE, FAVOR DE INTENTARLO NUEVAMENTE ", Toast.LENGTH_SHORT).show();
                             }
@@ -486,6 +540,13 @@ public class EvidenciaMultimedia extends AppCompatActivity {
         }
     }
 
+    private void guardarDispositivo(){
+        share = getSharedPreferences("main",MODE_PRIVATE);
+        editor = share.edit();
+        editor.putString("DISPOSITIVO",guardarInfoDispositivo);
+        editor.commit();
+    }
+
     public void solicitarPermisosCamera() {
         if (ContextCompat.checkSelfPermission(EvidenciaMultimedia.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(EvidenciaMultimedia.this, new String[]{Manifest.permission.CAMERA}, 1000);
@@ -495,5 +556,35 @@ public class EvidenciaMultimedia extends AppCompatActivity {
         share = getSharedPreferences("main", Context.MODE_PRIVATE);
         cargarServicio = share.getString("Servicio", "SIN INFORMACION");
         cargarUsuario = share.getString("Usuario", "SIN INFORMACION");
+        cargarInfoDispositivo = share.getString("DISPOSITIVO", "SIN INFORMACION");
+    }
+
+    /********************** OBTIENE EL NOMBRE Y MARCA DEL DISPOSITIVO ******************************************/
+    public String obtenerNombreDeDispositivo() {
+        String fabricante = Build.MANUFACTURER;
+        String modelo = Build.MODEL;
+        if (modelo.startsWith(fabricante)) {
+            System.out.println("MODELO" +modelo);
+            System.out.println("fabricante" +fabricante);
+            guardarInfoDispositivo = fabricante;
+            return primeraLetraMayuscula(modelo);
+        } else {
+            System.out.println("MODELO" +modelo);
+            System.out.println("fabricante" +fabricante);
+            guardarInfoDispositivo = fabricante;
+            return primeraLetraMayuscula(fabricante) + " " + modelo;
+        }
+    }
+
+    private String primeraLetraMayuscula(String cadena) {
+        if (cadena == null || cadena.length() == 0) {
+            return "";
+        }
+        char primeraLetra = cadena.charAt(0);
+        if (Character.isUpperCase(primeraLetra)) {
+            return cadena;
+        } else {
+            return Character.toUpperCase(primeraLetra) + cadena.substring(1);
+        }
     }
 }

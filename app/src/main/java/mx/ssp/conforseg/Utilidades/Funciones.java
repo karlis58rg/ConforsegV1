@@ -1,7 +1,9 @@
 package mx.ssp.conforseg.Utilidades;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.widget.DatePicker;
@@ -11,9 +13,11 @@ import android.widget.ListView;
 
 import java.util.Calendar;
 
+import mx.ssp.conforseg.Activity.IncidenciasPendientes;
 import mx.ssp.conforseg.R;
 
 public class Funciones {
+    ProgressDialog progressDialog;
 
     //***************** Calendario Picker **************************//
     public void calendar(Integer idCajadeTextoCalendario, Context context, Activity activity){
@@ -45,5 +49,13 @@ public class Funciones {
         alto = (listView.getAdapter().getCount())*factorAlto;
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ancho, alto);
         listView.setLayoutParams(params);
+    }
+
+    public void Procesando(Activity activity, String Titulo, String Mensaje){
+        progressDialog = ProgressDialog.show(activity, Titulo,
+                Mensaje, true);
+    }
+    public void ProcesandoDissmis(Activity activity){
+        progressDialog.dismiss();
     }
 }

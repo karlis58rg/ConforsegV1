@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,6 +59,7 @@ public class Supervisiones extends AppCompatActivity {
     /*************************************************************/
     Double lat,lon;
     String mensaje1,mensaje2;
+    Toast toast;
 
 
     @Override
@@ -102,6 +104,7 @@ public class Supervisiones extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "LO SENTIMOS, DEBE HABILITAR LOS SERVICIOS DE GPS. ", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getApplicationContext(), "ESTAMOS PROCESANDO SU SOLICITUD, UN MOMENTO POR FAVOR", Toast.LENGTH_SHORT).show();
+                    funciones.Procesando(Supervisiones.this,"","ENVIANDO ACCESOS, UN MOMENTO POR FAVOR...");
                     insertAcceso();
                 }
             }
@@ -159,6 +162,7 @@ public class Supervisiones extends AppCompatActivity {
         DataHelper dataHelper = new DataHelper(getApplication());
         int idDescServicio = dataHelper.getIdTempoServiciosSup(cargarServicio);
         String idServicio = String.valueOf(idDescServicio);
+
         longitud = String.valueOf(lon);
         latitud = String.valueOf(lat);
         ModeloAcceso modeloAcceso = new ModeloAcceso
@@ -194,6 +198,7 @@ public class Supervisiones extends AppCompatActivity {
                 e.printStackTrace();
                 Looper.prepare(); // to be able to make toast
                 Toast.makeText(getApplicationContext(), "ERROR AL ENVIAR SU REGISTRO, POR FAVOR VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_LONG).show();
+                funciones.ProcesandoDissmis(Supervisiones.this);
                 Looper.loop();
             }
             @Override
@@ -205,10 +210,16 @@ public class Supervisiones extends AppCompatActivity {
                         public void run() {
                             String resp = myResponse;
                             if(resp.equals("true")){
+                                funciones.ProcesandoDissmis(Supervisiones.this);
                                 System.out.println("EL DATO SE ENVIO CORRECTAMENTE");
                                 limpiarCampos();
                                 Toast.makeText(getApplicationContext(), "EL DATO SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT).show();
+                                /*toast = Toast.makeText(getApplicationContext(), "EL DATO SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT);
+                                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                                if( v != null) v.setGravity(Gravity.CENTER);
+                                toast.show();*/
                             }else{
+                                funciones.ProcesandoDissmis(Supervisiones.this);
                                 Toast.makeText(getApplicationContext(), "LO SENTIMOS, USTED YA COMPLETÓ SU FORMULARIO DEL DÍA", Toast.LENGTH_SHORT).show();
                             }
                             Log.i("HERE", resp);

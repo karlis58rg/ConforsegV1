@@ -107,6 +107,19 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imgLogoSupervision" />
 
+                <Button
+                    android:id="@+id/btnCargarServicios"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/boton_redondo"
+                    android:text="CARGAR SERVICIOS"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lblServiciosAsignados1" />
+
                 <Spinner
                     android:id="@+id/spSupervision"
                     android:layout_width="300dp"

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class DataHelper extends SQLiteOpenHelper {
     public static final String DataBase_Name = "Conforseg";
-    public static final int Database_Version = 1 ;
+    public static final int Database_Version = 3 ;
 
     public static final String Table_TempoServiciosSup = "TempoServiciosSup";
     public static final String Create_TempoServiciosSup = "CREATE TABLE IF NOT EXISTS " + Table_TempoServiciosSup +"(IdServicio INTEGER NOT NULL, Usuario TEXT NOT NULL ,Nombre TEXT NOT NULL, PRIMARY KEY (IdServicio, Usuario))";
@@ -18,7 +18,6 @@ public class DataHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(Create_TempoServiciosSup);
-
     }
 
     @Override
@@ -102,8 +101,25 @@ public class DataHelper extends SQLiteOpenHelper {
                 dbDatabase.endTransaction();
                 dbDatabase.close();
             }
+
         }
         return idServicio;
     }
-
+    public boolean DeleteTempoServiciosSup()
+    {
+        boolean eliminado = false;
+        SQLiteDatabase dbDatabase = this.getReadableDatabase();
+        dbDatabase.beginTransaction();
+        try{
+            eliminado = dbDatabase.delete(Table_TempoServiciosSup,null,   null) > 0;
+            dbDatabase.setTransactionSuccessful();
+        }catch (Exception e) {e.printStackTrace();}
+        finally {
+            {
+                dbDatabase.endTransaction();
+                dbDatabase.close();
+            }
+        }
+        return eliminado;
+    }
 }

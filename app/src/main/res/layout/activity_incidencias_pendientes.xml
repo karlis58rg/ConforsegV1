@@ -171,7 +171,7 @@
                 android:layout_below="@+id/lyFolios">
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:weightSum="1"
                     android:layout_weight="0.10"
@@ -181,15 +181,44 @@
                     <ListView
                         android:id="@+id/listAsistenciasPendientes"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:scrollbarSize="5dp"/>
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyFolios3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="50dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_below="@+id/lyFolios2">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="1"
+                android:layout_weight="0.10"
+                android:gravity="center"
+                android:background="@drawable/boton_rows_contenedor">
+                <TextView
+                    android:id="@+id/lblFolioIPRespuesta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:hint="Folio"/>
+            </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/lyDatosIncidenciasP2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lyFolios2"
+                android:layout_below="@id/lyFolios3"
                 android:layout_marginTop="15dp"
                 android:orientation="horizontal">
 
@@ -207,7 +236,7 @@
                         android:textColorHint="@color/white"
                         android:background="@drawable/marcospinner"
                         android:inputType="textMultiLine|textCapCharacters"
-                        android:hint="Observaciones"
+                        android:hint="Notas"
                         android:layout_marginTop="15dp"
                         android:paddingLeft="8dp"
                         android:paddingTop="5dp"/>

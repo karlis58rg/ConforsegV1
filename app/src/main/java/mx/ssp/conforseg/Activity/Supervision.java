@@ -30,12 +30,14 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Supervision extends AppCompatActivity {
-    Button btnElegirSupervision;
+    Button btnCargarServicios,btnElegirSupervision;
     Spinner spSupervision;
-    String descServicio;
+    String descServicio = "";
+    int bandera = 0,cargarBandera = 0;
     SharedPreferences share;
     SharedPreferences.Editor editor;
     ImageView imgLogOutWhite;
+    ArrayList<String> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +46,31 @@ public class Supervision extends AppCompatActivity {
         btnElegirSupervision = findViewById(R.id.btnElegirSupervision);
         spSupervision = findViewById(R.id.spSupervision);
         imgLogOutWhite = findViewById(R.id.imgLogOutWhite);
+        btnCargarServicios = findViewById(R.id.btnCargarServicios);
+        cargarDatos();
         ListServicios();
+
+        if(cargarBandera == 1){
+            btnCargarServicios.setVisibility(View.GONE);
+        }else{
+            btnCargarServicios.setVisibility(View.VISIBLE);
+        }
+
+        btnCargarServicios.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bandera = 1;
+                guardarBanderaServicio();
+                ListServicios();
+                btnCargarServicios.setVisibility(View.GONE);
+            }
+        });
 
         btnElegirSupervision.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                descServicio = (String) spSupervision.getSelectedItem();
-                if(descServicio.isEmpty()){
-                    Toast.makeText(getApplicationContext(),"LO SENTIMOS, ES NECESARIO SELECCIONAR UN SERVICIO.",Toast.LENGTH_SHORT).show();
+                if(spSupervision.getSelectedItem() == null && bandera == 0){
+                    Toast.makeText(getApplicationContext(),"LO SENTIMOS, ES NECESARIO CARGAR LOS SERVICIOS Y POSTERIORMENTE SELECCIONAR UN SERVICIO.",Toast.LENGTH_SHORT).show();
                 }else{
                     guardarServicio();
                     Intent i = new Intent( Supervision.this, Servicios.class);
@@ -64,6 +83,7 @@ public class Supervision extends AppCompatActivity {
         imgLogOutWhite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                deleteServicios();
                 eliminarDatos();
                 Intent i = new Intent(Supervision.this,Login.class);
                 startActivity(i);
@@ -75,9 +95,17 @@ public class Supervision extends AppCompatActivity {
     /**************** SPINNER **************************************/
     private void ListServicios() {
         DataHelper dataHelper = new DataHelper(getApplicationContext());
-        ArrayList<String> list = dataHelper.getAllTempoServiciosSup();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, R.id.txt, list);
-        spSupervision.setAdapter(adapter);
+        list = dataHelper.getAllTempoServiciosSup();
+        if (list.size() > 0) {
+            System.out.println("YA EXISTE INFORMACIÓN DE SERVICIOS");
+            Toast.makeText(getApplication(), "CUENTA CON SERVICIOS ACTIVOS.", Toast.LENGTH_LONG).show();
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplication(), R.layout.spinner_layout, R.id.txt, list);
+            adapter.notifyDataSetChanged();
+            spSupervision.setAdapter(adapter);
+            System.out.println("LISTA"+list);
+        }else{
+            Toast.makeText(getApplication(), "LO SENTIMOS, NO CUENTA CON SERVICIOS ACTIVOS.", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void guardarServicio() {
@@ -86,11 +114,32 @@ public class Supervision extends AppCompatActivity {
         editor.putString("Servicio", descServicio );
         editor.apply();
     }
+    private void guardarBanderaServicio() {
+        share = getSharedPreferences("main", MODE_PRIVATE);
+        editor = share.edit();
+        editor.putInt("ServicioCargado", bandera );
+        editor.apply();
+    }
 
     private void eliminarDatos(){
         share = getSharedPreferences("main",MODE_PRIVATE);
         editor = share.edit();
         editor.remove("Servicio").apply();
         editor.remove("Usuario").apply();
+        editor.remove("ServicioCargado").apply();
     }
+
+    private boolean deleteServicios() {
+        DataHelper dataHelper = new DataHelper(getApplicationContext());
+        boolean delete = dataHelper.DeleteTempoServiciosSup();
+        System.out.println(delete);
+        System.out.println("ELIMINANDO REGISTRO SQLITE");
+        return  delete;
+    }
+
+    public void cargarDatos() {
+        share = getSharedPreferences("main", Context.MODE_PRIVATE);
+        cargarBandera = share.getInt("ServicioCargado", 0);
+    }
+
 }
