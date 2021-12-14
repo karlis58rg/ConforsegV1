@@ -72,6 +72,7 @@ public class Supervision extends AppCompatActivity {
                 if(spSupervision.getSelectedItem() == null && bandera == 0){
                     Toast.makeText(getApplicationContext(),"LO SENTIMOS, ES NECESARIO CARGAR LOS SERVICIOS Y POSTERIORMENTE SELECCIONAR UN SERVICIO.",Toast.LENGTH_SHORT).show();
                 }else{
+                    descServicio = (String) spSupervision.getSelectedItem();
                     guardarServicio();
                     Intent i = new Intent( Supervision.this, Servicios.class);
                     startActivity(i);
@@ -98,13 +99,14 @@ public class Supervision extends AppCompatActivity {
         list = dataHelper.getAllTempoServiciosSup();
         if (list.size() > 0) {
             System.out.println("YA EXISTE INFORMACIÓN DE SERVICIOS");
-            Toast.makeText(getApplication(), "CUENTA CON SERVICIOS ACTIVOS.", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplication(), "CUENTA CON SERVICIOS ACTIVOS.", Toast.LENGTH_LONG).show();
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplication(), R.layout.spinner_layout, R.id.txt, list);
             adapter.notifyDataSetChanged();
             spSupervision.setAdapter(adapter);
             System.out.println("LISTA"+list);
         }else{
-            Toast.makeText(getApplication(), "LO SENTIMOS, NO CUENTA CON SERVICIOS ACTIVOS.", Toast.LENGTH_LONG).show();
+            System.out.println("NO CUENTA CON SERVICIOS ACTIVOS");
+            //Toast.makeText(getApplication(), "LO SENTIMOS, NO CUENTA CON SERVICIOS ACTIVOS.", Toast.LENGTH_LONG).show();
         }
     }
 

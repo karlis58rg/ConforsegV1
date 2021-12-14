@@ -41,6 +41,7 @@ public class Salir extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.salir_fragment, container, false);
+        deleteServicios();
         eliminarDatos();
         //CIERRAS SESIÓN Y TERMINAS LA VENTANA ACTUAL
         getActivity().finishAffinity();
@@ -59,6 +60,15 @@ public class Salir extends Fragment {
         editor = share.edit();
         editor.remove("Servicio").apply();
         editor.remove("Usuario").apply();
+        editor.remove("ServicioCargado").apply();
+    }
+
+    private boolean deleteServicios() {
+        DataHelper dataHelper = new DataHelper(getContext());
+        boolean delete = dataHelper.DeleteTempoServiciosSup();
+        System.out.println(delete);
+        System.out.println("ELIMINANDO REGISTRO SQLITE");
+        return  delete;
     }
 
 }

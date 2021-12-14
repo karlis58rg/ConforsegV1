@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="8dp"
     android:paddingRight="20dp">
 
@@ -102,6 +102,82 @@
                     android:paddingTop="10dp"
                     android:text="No" />
             </RadioGroup>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/principalLinearObservaciones"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:elevation="50dp"
+        android:orientation="horizontal">
+
+        <!--Barra color -->
+        <LinearLayout
+            android:id="@+id/lyIndicadorStatusObservaciones"
+            android:layout_width="8dp"
+            android:layout_height="match_parent"
+            android:background="@color/backgroundBotones"
+            android:orientation="horizontal"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <!-- Id  -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:orientation="horizontal"
+                android:paddingLeft="18dp">
+
+                <TextView
+                    android:id="@+id/lblIdUserAsistenciaObservaciones"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textColor="@color/color_bold_list"
+                    android:textSize="20sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+            <!-- Nombre  -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lblObservacionesAsistencia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="Observaciones"
+                    android:textColor="@color/color_bold_list" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutObservaciones"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingRight="15dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/txtObservacionesAsistencias"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="start|top"
+                android:inputType="textMultiLine|textCapCharacters"
+                android:padding="10dp">
+            </EditText>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

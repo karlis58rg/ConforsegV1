@@ -190,11 +190,11 @@ public class Login extends AppCompatActivity {
         DataHelper dataHelper = new DataHelper(getApplication());
         ArrayList<String> list = dataHelper.getAllTempoServiciosSup();
         if (list.size() > 0) {
-            Toast.makeText(getApplication(), "CUENTA CON SERVICIOS ACTIVOS.", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplication(), "CUENTA CON SERVICIOS ACTIVOS.", Toast.LENGTH_LONG).show();
             System.out.println("YA EXISTE INFORMACIÓN DE SERVICIOS");
         }else{
             System.out.println("NO CUENTA CON SERVICIOS ACTIVOS");
-            Toast.makeText(getApplication(), "LO SENTIMOS, NO CUENTA CON SERVICIOS ACTIVOS.", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplication(), "LO SENTIMOS, NO CUENTA CON SERVICIOS ACTIVOS.", Toast.LENGTH_LONG).show();
         }
     }
 
