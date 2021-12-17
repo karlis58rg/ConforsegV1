@@ -176,7 +176,8 @@ public class Supervisiones extends AppCompatActivity {
         ModeloAcceso modeloAcceso = new ModeloAcceso
                 (idServicio, txtFechaRegistroSup.getText().toString(), txtTaxis.getText().toString(),
                        txtVisitantesPeatonales.getText().toString(), txtVisitanteenVehiculo.getText().toString(), txtEmpleadasDomesticas.getText().toString(),
-                        txtTrabajadorenVehiculo.getText().toString(), txtTrabajadorPeatonal.getText().toString(), txtAccesoARC.getText().toString(), txtEmpleados.getText().toString(), txtIncidentes.getText().toString(), txtRecorridos.getText().toString(),
+                        txtTrabajadorenVehiculo.getText().toString(), txtTrabajadorPeatonal.getText().toString(), txtAccesoARC.getText().toString(),
+                        txtEmpleados.getText().toString(), txtIncidentes.getText().toString(), txtRecorridos.getText().toString(),
                         txtOtros.getText().toString(),longitud, latitud, cargarUsuario);
 
         OkHttpClient client = new OkHttpClient();
@@ -184,12 +185,12 @@ public class Supervisiones extends AppCompatActivity {
                 .add("IdServicio", modeloAcceso.getIdServicio())
                 .add("Fecha", modeloAcceso.getFecha())
                 .add("Taxi", modeloAcceso.getTaxi())
-                .add("VistitantesPeatonales", modeloAcceso.getSerPublicos())
-                .add("VisitanteEnVehiculo", modeloAcceso.getVisitante())
-                .add("EmpleadasDomesticas", modeloAcceso.getProveedores())
-                .add("TrabajadorEnVehiculo", modeloAcceso.getPeatones())
-                .add("TrabajadorPeatonal", modeloAcceso.getPeatones())
-                .add("AccesoARC", modeloAcceso.getPeatones())
+                .add("VisitantesPeatonales", modeloAcceso.getVisitantesPeatonales())
+                .add("VisitanteEnVehiculo", modeloAcceso.getVisitanteEnVehiculo())
+                .add("EmpleadasDomesticas", modeloAcceso.getEmpleadasDomesticas())
+                .add("TrabajadorEnVehiculo", modeloAcceso.getTrabajadorEnVehiculo())
+                .add("TrabajadorPeatonal", modeloAcceso.getTrabajadorPeatonal())
+                .add("AccesoARC", modeloAcceso.getAccesoARC())
                 .add("Empleados", modeloAcceso.getEmpleados())
                 .add("Incidentes", modeloAcceso.getIncidentes())
                 .add("Recorridos", modeloAcceso.getRecorridos())

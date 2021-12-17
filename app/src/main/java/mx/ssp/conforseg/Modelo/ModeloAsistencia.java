@@ -9,9 +9,10 @@ public class ModeloAsistencia {
     private String Longitud;
     private String Latitud;
     private String Usuario;
+    private String Observaciones;
 
     public ModeloAsistencia(String idServicio, String idVigilante, String fecha,
-                            String asistencia, String longitud, String latitud, String usuario) {
+                            String asistencia, String longitud, String latitud, String usuario,String observaciones) {
         IdServicio = idServicio;
         IdVigilante = idVigilante;
         Fecha = fecha;
@@ -19,6 +20,7 @@ public class ModeloAsistencia {
         Longitud = longitud;
         Latitud = latitud;
         Usuario = usuario;
+        Observaciones = observaciones;
     }
 
     public String getIdServicio() {
@@ -75,6 +77,14 @@ public class ModeloAsistencia {
 
     public void setUsuario(String usuario) {
         Usuario = usuario;
+    }
+
+    public String getObservaciones() {
+        return Observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        Observaciones = observaciones;
     }
 
 }

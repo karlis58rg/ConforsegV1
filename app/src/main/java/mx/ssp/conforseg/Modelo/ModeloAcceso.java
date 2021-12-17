@@ -5,10 +5,12 @@ public class ModeloAcceso {
     private String IdServicio;
     private String Fecha;
     private String Taxi;
-    private String SerPublicos;
-    private String Visitante;
-    private String Proveedores;
-    private String Peatones;
+    private String VisitantesPeatonales;
+    private String VisitanteEnVehiculo;
+    private String EmpleadasDomesticas;
+    private String TrabajadorEnVehiculo;
+    private String TrabajadorPeatonal;
+    private String AccesoARC;
     private String Empleados;
     private String Incidentes;
     private String Recorridos;
@@ -17,25 +19,6 @@ public class ModeloAcceso {
     private String Latitud;
     private String Usuario;
 
-
-    public ModeloAcceso(String servicio, String s, String idServicio, String fecha, String taxi, String serPublicos, String visitante, String proveedores,
-                        String peatones, String empleados, String incidentes, String recorridos, String otros,
-                        String longitud, String latitud, String usuario) {
-        IdServicio = idServicio;
-        Fecha = fecha;
-        Taxi = taxi;
-        SerPublicos = serPublicos;
-        Visitante = visitante;
-        Proveedores = proveedores;
-        Peatones = peatones;
-        Empleados = empleados;
-        Incidentes = incidentes;
-        Recorridos = recorridos;
-        Otros = otros;
-        Longitud = longitud;
-        Latitud = latitud;
-        Usuario = usuario;
-    }
 
     public String getIdServicio() {
         return IdServicio;
@@ -61,36 +44,52 @@ public class ModeloAcceso {
         Taxi = taxi;
     }
 
-    public String getSerPublicos() {
-        return SerPublicos;
+    public String getVisitantesPeatonales() {
+        return VisitantesPeatonales;
     }
 
-    public void setSerPublicos(String serPublicos) {
-        SerPublicos = serPublicos;
+    public void setVisitantesPeatonales(String visitantesPeatonales) {
+        VisitantesPeatonales = visitantesPeatonales;
     }
 
-    public String getVisitante() {
-        return Visitante;
+    public String getVisitanteEnVehiculo() {
+        return VisitanteEnVehiculo;
     }
 
-    public void setVisitante(String visitante) {
-        Visitante = visitante;
+    public void setVisitanteEnVehiculo(String visitanteEnVehiculo) {
+        VisitanteEnVehiculo = visitanteEnVehiculo;
     }
 
-    public String getProveedores() {
-        return Proveedores;
+    public String getEmpleadasDomesticas() {
+        return EmpleadasDomesticas;
     }
 
-    public void setProveedores(String proveedores) {
-        Proveedores = proveedores;
+    public void setEmpleadasDomesticas(String empleadasDomesticas) {
+        EmpleadasDomesticas = empleadasDomesticas;
     }
 
-    public String getPeatones() {
-        return Peatones;
+    public String getTrabajadorEnVehiculo() {
+        return TrabajadorEnVehiculo;
     }
 
-    public void setPeatones(String peatones) {
-        Peatones = peatones;
+    public void setTrabajadorEnVehiculo(String trabajadorEnVehiculo) {
+        TrabajadorEnVehiculo = trabajadorEnVehiculo;
+    }
+
+    public String getTrabajadorPeatonal() {
+        return TrabajadorPeatonal;
+    }
+
+    public void setTrabajadorPeatonal(String trabajadorPeatonal) {
+        TrabajadorPeatonal = trabajadorPeatonal;
+    }
+
+    public String getAccesoARC() {
+        return AccesoARC;
+    }
+
+    public void setAccesoARC(String accesoARC) {
+        AccesoARC = accesoARC;
     }
 
     public String getEmpleados() {
@@ -148,5 +147,27 @@ public class ModeloAcceso {
     public void setUsuario(String usuario) {
         Usuario = usuario;
     }
+
+    public ModeloAcceso(String idServicio, String fecha, String taxi, String visitantesPeatonales, String visitanteEnVehiculo, String empleadasDomesticas,
+                        String trabajadorEnVehiculo, String trabajadorPeatonal, String accesoARC, String empleados, String incidentes,
+                        String recorridos, String otros, String longitud, String latitud, String usuario) {
+        IdServicio = idServicio;
+        Fecha = fecha;
+        Taxi = taxi;
+        VisitantesPeatonales = visitantesPeatonales;
+        VisitanteEnVehiculo = visitanteEnVehiculo;
+        EmpleadasDomesticas = empleadasDomesticas;
+        TrabajadorEnVehiculo = trabajadorEnVehiculo;
+        TrabajadorPeatonal = trabajadorPeatonal;
+        AccesoARC = accesoARC;
+        Empleados = empleados;
+        Incidentes = incidentes;
+        Recorridos = recorridos;
+        Otros = otros;
+        Longitud = longitud;
+        Latitud = latitud;
+        Usuario = usuario;
+    }
+
 
 }

@@ -17,13 +17,18 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -60,12 +65,13 @@ public class Asistencia extends AppCompatActivity {
     Button btnAsistencias;
     TextView lblServiciosAsistencia;
     ListView listAsistenciasPrincipal;
-    ArrayList<String> ListaIdAsistencia,ListaAsistencia,ListaRadioBoolean;
+    ArrayList<String> ListaIdAsistencia,ListaAsistencia,ListaRadioBoolean,ListaObservaciones;
     String[] ArrayListaAsistencia;
     SharedPreferences share;
     String cargarServicio, cargarUsuario,fecha,
             latitud = "null", longitud = "null";
     Funciones funciones;
+    MyAdapter adapterGlobal;
     ImageView imgHomeWhiteAsistencia;
     /*************************************************************/
     Double lat, lon;
@@ -95,13 +101,36 @@ public class Asistencia extends AppCompatActivity {
                 TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
                 if( v != null) v.setGravity(Gravity.CENTER);
                 toast.show();*/
+
                 for(int i = 0; i< listAsistenciasPrincipal.getCount();i++)
                 {
                     Log.i("LIBRETA",ListaIdAsistencia.get(i));
                     Log.i("LIBRETA",ListaAsistencia.get(i));
                     Log.i("LIBRETA",ListaRadioBoolean.get(i));
-                    insertAsistencias(ListaIdAsistencia.get(i),ListaRadioBoolean.get(i));
+                    Log.i("LIBRETA",ListaObservaciones.get(i));
+
+                  /*  View v = listAsistenciasPrincipal.getChildAt(i);
+                    EditText et = (EditText) v.findViewById(R.id.txtObservacionesAsistencias);
+                    ListaObservaciones.add(et.getText().toString());*/
+
+                    /*View mivista = adapterGlobal.getView(1,null,listAsistenciasPrincipal);
+                    EditText textView = (EditText) mivista.findViewById(R.id.txtObservacionesAsistencias);
+                    Toast.makeText(getApplicationContext(), textView.getText().toString(), Toast.LENGTH_SHORT).show();*/
+
+                   /* View v = listAsistenciasPrincipal.getAdapter().getView(i, null, null);
+                    EditText et = (EditText) v.findViewById(R.id.txtObservacionesAsistencias);
+                    ListaObservaciones.add(et.getText().toString());*/
+
+                    insertAsistencias(ListaIdAsistencia.get(i),ListaRadioBoolean.get(i),ListaObservaciones.get(i));
                 }
+            }
+        });
+
+        listAsistenciasPrincipal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                EditText textView = (EditText) view.findViewById(R.id.txtObservacionesAsistencias);
+                Toast.makeText(getApplicationContext(), textView.getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -150,6 +179,7 @@ public class Asistencia extends AppCompatActivity {
                                 ListaIdAsistencia = new ArrayList<String>();
                                 ListaAsistencia = new ArrayList<String>();
                                 ListaRadioBoolean = new ArrayList<String>();
+                                ListaObservaciones = new ArrayList<String>();
                                 Log.i("ASISTENCIA", "RESP:" + resp);
 
                                 //***************** RESPUESTA DEL WEBSERVICE **************************//
@@ -182,6 +212,7 @@ public class Asistencia extends AppCompatActivity {
                                                                     " "+((jsonjObject.getString("APaterno")).equals("null")?"":jsonjObject.getString("APaterno"))
                                             );
                                             ListaRadioBoolean.add("NO");
+                                            ListaObservaciones.add("NA");
 
                                         } catch (JSONException e) {
                                             Log.i("ASISTENCIAS", "catch:" + e.toString());
@@ -194,7 +225,8 @@ public class Asistencia extends AppCompatActivity {
                                 }
 
                                 //AGREGA LOS DATOS AL LISTVIEW MEDIANTE EL ADAPTADOR
-                                Asistencia.MyAdapter adapter = new Asistencia.MyAdapter(getApplicationContext(),ListaIdAsistencia, ListaAsistencia, "Nombre",ListaRadioBoolean);
+                                Asistencia.MyAdapter adapter = new Asistencia.MyAdapter(getApplicationContext(),ListaIdAsistencia, ListaAsistencia, "Nombre",ListaRadioBoolean,ListaObservaciones);
+                                adapterGlobal = adapter;
                                 listAsistenciasPrincipal.setAdapter(adapter);
                                 funciones.ajustaAlturaListView(listAsistenciasPrincipal,440);
                                 funciones.ProcesandoDissmis(Asistencia.this);
@@ -215,7 +247,7 @@ public class Asistencia extends AppCompatActivity {
         });
     }
 
-    private void insertAsistencias(String idUser,String asistencia) {
+    private void insertAsistencias(String idUser,String asistencia,String observaciones) {
         System.out.println("INSERT");
         DataHelper dataHelper = new DataHelper(getApplication());
         int idDescServicio = dataHelper.getIdTempoServiciosSup(cargarServicio);
@@ -230,7 +262,7 @@ public class Asistencia extends AppCompatActivity {
 
         ModeloAsistencia modeloAsistencia = new ModeloAsistencia
                 (idServicio, idUser, fecha,
-                        asistencia, longitud, latitud, cargarUsuario);
+                        asistencia, longitud, latitud, cargarUsuario,observaciones);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody body = new FormBody.Builder()
@@ -241,6 +273,7 @@ public class Asistencia extends AppCompatActivity {
                 .add("Longitud", modeloAsistencia.getLongitud())
                 .add("Latitud", modeloAsistencia.getLatitud())
                 .add("Usuario", modeloAsistencia.getUsuario())
+                .add("Observaciones", modeloAsistencia.getObservaciones())
                 .build();
         Request request = new Request.Builder()
                 .url("https://c5.hidalgo.gob.mx/WsConforseg/api/Asistencias/")
@@ -374,15 +407,16 @@ public class Asistencia extends AppCompatActivity {
 
     class MyAdapter extends ArrayAdapter<String> {
         Context context;
-        ArrayList<String> ListaIdAsistenciaAr,ListaAsistenciasAr,ListaRadioBoolean;
+        ArrayList<String> ListaIdAsistenciaAr,ListaAsistenciasAr,ListaRadioBoolean,ListaObservaciones;
         String titulo;
 
-        MyAdapter(Context c,ArrayList<String> ListaIdAsistencia, ArrayList<String> ListaAsistencias, String titulo, ArrayList<String> ListaRadioBoolean) {
+        MyAdapter(Context c,ArrayList<String> ListaIdAsistencia, ArrayList<String> ListaAsistencias, String titulo, ArrayList<String> ListaRadioBoolean,ArrayList<String> ListaObservaciones) {
             super(c, R.layout.row_asistencia, ListaAsistencias);
             this.context = c;
             this.ListaIdAsistenciaAr = ListaIdAsistencia;
             this.ListaAsistenciasAr = ListaAsistencias;
             this.ListaRadioBoolean = ListaRadioBoolean;
+            this.ListaObservaciones = ListaObservaciones;
             this.titulo = titulo;
         }
 
@@ -396,10 +430,31 @@ public class Asistencia extends AppCompatActivity {
 
             TextView lblIUser = row.findViewById(R.id.lblIdUserAsistencia);
             TextView lblDatosUser = row.findViewById(R.id.lblUserAsistencia);
+            EditText txtObservaciones = row.findViewById(R.id.txtObservacionesAsistencias);
+            //String obs = txtObservaciones.getText().toString();
+
+            //ListaObservaciones.set(position,"");
 
             RadioGroup rgAsistio =row.findViewById(R.id.rgAsistio);
             RadioButton rbSi = row.findViewById(R.id.rbSi);
             RadioButton rbNo = row.findViewById(R.id.rbNo);
+
+            txtObservaciones.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ListaObservaciones.set(position,txtObservaciones.getText().toString());
+                }
+            });
 
             rgAsistio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
@@ -421,9 +476,15 @@ public class Asistencia extends AppCompatActivity {
             // Asigna los valores
             lblIUser.setText(ListaIdAsistenciaAr.get(position));
             lblDatosUser.setText(ListaAsistenciasAr.get(position));
+            //String listChoice = ((EditText) listAsistenciasPrincipal.getItemAtPosition (position)).getText().toString();
+            //String obser = txtObservaciones.getText().toString();
+            //Log.i("lista",obser);
+            //ListaObservaciones.set(position,txtObservaciones.getText().toString().toUpperCase());
 
             return row;
         }
+
+
 
     }
 }
